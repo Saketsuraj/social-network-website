@@ -1,4 +1,4 @@
-<?php include('server.php') ?>
+<?php include('server.php'); ?>
 <!DOCTYPE html>
 <html>
 
@@ -30,6 +30,18 @@
 </head>
 
 <body id="wall">
+<?php 
+    $query = "select p.*, u.username as username, u.email as email from posts as p, users as u where u.id = p.user_id order by p.post_id desc";
+    $result = mysqli_query($db, $query);
+    
+    
+    $results = [];
+    if ($result) {
+        while($row = mysqli_fetch_assoc($result)){
+            $results[] = $row;
+        }
+    }
+?>
 
     <!--Header with Nav -->
     <header class="text-right">
@@ -125,24 +137,32 @@
     <!--Wall with Post -->
     <div class="content-posts active" id="posts">
         <div id="posts-container" class="container-fluid container-posts">
-        <textarea rows="5" cols="60" placeholder="Let crowd know what's on your mind"></textarea>
-        <div><button class="button button5">Publish</button></div>
-
-            <div class="card-post">
+        <div class="container col-lg-12">
+            <div class="col-lg-6">
+                <form id="myform" action="insertpost.php" method="post">
+                    <div class="form-group">
+                        <input type="text" name="post" class="form-control">
+                    </div>
+                    <input type="submit" name="submit" value="publish" class="btn btn-success" id="submit">
+                </form>
+            </div>
+        </div>
+        
+            <!-- <div class="card-post">
                 <div class="row">
-                    <div class="col-xs-3 col-sm-2">
+                    <div class="col-xs-9 col-sm-10">
                         <a href="personal-profile.php" title="Profile">
                             <img src="img/user.jpg" alt="User name" class="img-circle img-user">
                         </a>
                     </div>
                     <div class="col-xs-9 col-sm-10 info-user">
-                        <h3><a href="personal-profile.php" title="Profile" value="<?php echo $username; ?>"></a></h3>
+                        <h3><a href="personal-profile.php" title="Profile"><?php echo $res['username']; ?></a></h3>
                         <p><i>2h</i></p>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-sm-8 col-sm-offset-2 data-post">
-                        <p>Nice</p>
+                        <p><?php echo $res['post']; ?></p>
                         <div class="reaction">
                             &#x2764; 156 &#x1F603; 54
                         </div>
@@ -158,8 +178,9 @@
                         </div>
                     </div>
                 </div>
-            </div>
-
+            </div> -->
+        
+        <?php foreach($results as $res){ ?>
             <div class="card-post">
                 <div class="row">
                     <div class="col-xs-3 col-sm-2">
@@ -168,14 +189,14 @@
                         </a>
                     </div>
                     <div class="col-xs-9 col-sm-10 info-user">
-                        <h3><a href="user-profile.php" title="User Profile">User Name</a></h3>
+                        <h3><a href="user-profile.php" title="User Profile"><?php echo $res['username']; ?></a></h3>
                         <p><i>2h</i></p>
                     </div>
                 </div>
                 <div class="row">
                     <div class=" col-sm-8 col-sm-offset-2 data-post">
-                        <p>Nice</p>
-                        <img src="img/post.jpg" alt="image post" class="img-post">
+                        <p><?php echo $res['post']; ?></p>
+                        <!-- <img src="img/post.jpg" alt="image post" class="img-post"> -->
                         <div class="reaction">
                             &#x2764; 1234 &#x1F603; 54
                         </div>
@@ -192,7 +213,8 @@
                     </div>
                 </div>
             </div>
-
+        <?php } ?>
+            <!--
             <div class="card-post">
                 <div class="row">
                     <div class="col-xs-3 col-sm-2">
@@ -228,7 +250,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> -->
         </div>
         <!--Close #posts-container-->
         <div id="loading">
@@ -243,6 +265,43 @@
             </div>
         </div>
     </div>
+
+
+
+<!-- publish script start -->
+<script type="text/javascript">
+$(document).ready(function() {
+     $(':input[type="submit"]').prop('disabled', true);
+     $('input[type="text"]').keyup(function() {
+        if($(this).val() != '') {
+           $(':input[type="submit"]').prop('disabled', false);
+        }
+     });
+ });
+
+
+     $(document).ready(function(){
+       var form = $('#myform');
+       $('#submit').click(function(e){
+           e.preventDefault();
+        $.ajax({
+           url: form.attr("action"),
+           type: 'post',
+           dataType:'json',
+           data: $("#myform input").serialize(),
+           success: function(data){
+               
+               if(data['status']){
+                   //alert(data['message']);
+                   location.reload();
+               }
+           }
+        });
+       });
+     });
+
+  </script>
+// publish script ends
 </body>
 
 
