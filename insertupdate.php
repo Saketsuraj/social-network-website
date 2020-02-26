@@ -9,9 +9,10 @@ session_start();
 if(isset($_POST['submit'])){
     $fname = $_POST['fname'];
     $age = $_POST['age'];
+    $description = $_POST['description'];
     $user_id = $_SESSION['user_id'];
 
-    $q = "insert into updatedetails ( fname, age, user_id ) values ( '$fname', '$age', '$user_id')";
+    $q = "insert into updatedetails ( fname, age, user_id, description ) values ( '$fname', '$age', '$user_id', '$description')";
 
     $query = mysqli_query($con, $q);
 

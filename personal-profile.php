@@ -20,6 +20,7 @@
 </head>
 
 <body id="personal">
+<!-- Php Script start for displaying activities of user like post -->
 <?php 
     $x = $_SESSION['user_id'];
     $query = "select p.*, u.username as username, u.email as email from posts as p, users as u where p.user_id=".$x." and u.id=p.user_id order by p.post_id desc";
@@ -33,6 +34,25 @@
         }
     }
 ?>
+<!-- Php Script ends for displaying activities of user like post -->
+
+<!-- Php script starts for displaying updated profile in profile tab -->
+
+<?php 
+    $y = $_SESSION['user_id'];
+    $queryupdate = "select up.fname, up.age, up.description, u.username as username from updatedetails as up, users as u where up.user_id=".$y." and u.id=up.user_id order by up.update_id desc LIMIT 1";
+    $resup = mysqli_query($db, $queryupdate);
+
+    $resups = [];
+    if ($resup) {
+        while($row = mysqli_fetch_assoc($resup)){
+            $resups[] = $row;
+        }
+    }
+?>
+
+<!-- Php script ends for displaying updated profile in profile tab -->
+
 
     <!--Header with Nav -->
     <header class="text-right">
@@ -115,15 +135,18 @@
     </header>
 
     <!--Left Sidebar with info Profile -->
+    <?php foreach($resups as $resp){ ?>
     <div class="sidebar-nav">
         <a href="personal-profile.php" title="Profile">
             <img src="img/user.jpg" alt="User name" class="img-circle img-user">
         </a>
-        <h2 class="text-center hidden-xs"><a href="personal-profile.php" title="Profile"><?php  echo $_SESSION["username"]; ?></a></h2>
+        <h2 class="text-center hidden-xs"><a href="personal-profile.php" title="Profile"><?php echo $resp['fname']; ?></a></h2>
         <p class="text-center user-description hidden-xs">
-            <i>In my spare time, the web development community is a big part of my life. Whether teaching code to kids at a local school, managing online programming groups and blogs or attending a conference, I find keeping involved helps me stay up to date..</i>
+            <i><?php echo $resp['description']; ?></i>
         </p>
     </div>
+    <?php } ?>
+    
 
     <div class="content-posts profile-content">
         <div class="banner-profile">
@@ -255,16 +278,20 @@
             </div><!-- end Tab Posts -->
 
             <!--Start Tab Profile-->
+            <?php foreach($resups as $resp){ ?>
             <div class="tab-pane fade" role="tabpanel" id="profile" aria-labelledby="profileTab">
                 <div class="container-fluid container-posts">
                     <div class="card-post">
-                        <ul class="profile-data" id="ageList">
+                        <ul class="profile-data">
+                            <li><b>Full Name:</b> <?php echo $resp['fname']; ?></li>
+                            <li><b>Age:</b> <?php echo $resp['age']; ?></li>
+                            <li><b>About me:</b> <?php echo $resp['description']; ?></li>
                         </ul>
-                        <p><a href="edit.html" title="edit profile"><i class="fa fa-pencil" aria-hidden="true"></i> Edit
-                                profile</a></p>
+                        <p><a href="edit.html" title="edit profile"><i class="fa fa-pencil" aria-hidden="true"></i> Edit profile</a></p>
                     </div>
                 </div>
             </div>
+            <?php } ?>
             <!-- end tab Profile -->
 
             <!-- Start Tab chat-->
