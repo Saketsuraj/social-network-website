@@ -76,7 +76,7 @@
                             </div>
                         </a>
                     </li>
-                    <li>
+                    <!-- <li>
                         <a href="#" title="Settings">
                             <div class="col-xs-4">
                                 <i class="fa fa-question" aria-hidden="true"></i>
@@ -85,7 +85,7 @@
                                 <span>FAQ</span>
                             </div>
                         </a>
-                    </li>
+                    </li> -->
                     <li>
                         <a href="index.php?logout='1' title=" Settings">
                             <div class="col-xs-4">

@@ -30,6 +30,7 @@
 </head>
 
 <body id="wall">
+    <!-- php script starts for displaying post on wall -->
 <?php 
     $query = "select p.*, u.username as username, u.email as email from posts as p, users as u where u.id = p.user_id order by p.post_id desc";
     $result = mysqli_query($db, $query);
@@ -42,6 +43,24 @@
         }
     }
 ?>
+<!-- php script ends for displaying post on wall -->
+
+<!-- Php script starts for displaying updated profile in profile tab -->
+
+<?php 
+    $y = $_SESSION['user_id'];
+    $queryupdate = "select up.fname, up.age, up.description, u.username as username from updatedetails as up, users as u where up.user_id=".$y." and u.id=up.user_id order by up.update_id desc LIMIT 1";
+    $resup = mysqli_query($db, $queryupdate);
+
+    $resups = [];
+    if ($resup) {
+        while($row = mysqli_fetch_assoc($resup)){
+            $resups[] = $row;
+        }
+    }
+?>
+
+<!-- Php script ends for displaying updated profile in profile tab -->
 
     <!--Header with Nav -->
     <header class="text-right">
@@ -65,7 +84,7 @@
                             </div>
                         </a>
                     </li>
-                    <li>
+                    <!-- <li>
                         <a href="#" title="Settings">
                             <div class="col-xs-4">
                                 <i class="fa fa-question" aria-hidden="true"></i>
@@ -74,7 +93,7 @@
                                 <span>FAQ</span>
                             </div>
                         </a>
-                    </li>
+                    </li> -->
                     <li>
                         <a href="index.php?logout='1' title="Settings">
                             <div class="col-xs-4">
@@ -124,15 +143,17 @@
     </header>
 
     <!--Left Sidebar with info Profile -->
+    <?php foreach($resups as $resp){ ?>
     <div class="sidebar-nav">
         <a href="personal-profile.php" title="Profile">
             <img src="img/user.jpg" alt="User name" class="img-circle img-user">
         </a>
-        <h2 class="text-center hidden-xs"><a href="personal-profile.php" title="Profile"><?php  echo $_SESSION["username"]; ?></a></h2>
+        <h2 class="text-center hidden-xs"><a href="personal-profile.php" title="Profile"><?php echo $resp['fname']; ?></a></h2>
         <p class="text-center user-description hidden-xs">
-            <i>In my spare time, the web development community is a big part of my life. Whether teaching code to kids at a local school, managing online programming groups and blogs or attending a conference, I find keeping involved helps me stay up to date..</i>
+            <i><?php echo $resp['description']; ?></i>
         </p>
     </div>
+    <?php } ?>
 
     <!--Wall with Post -->
     <div class="content-posts active" id="posts">
@@ -292,7 +313,7 @@ $(document).ready(function() {
            success: function(data){
                
                if(data['status']){
-                   //alert(data['message']);
+                   alert(data['message']);
                    location.reload();
                }
            }

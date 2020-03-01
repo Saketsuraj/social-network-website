@@ -1,3 +1,20 @@
+<?php include('server.php'); ?>
+<!-- php code starts to display username and email -->
+$user_id = $_SESSION['user_id'];
+$query = "select * from users where id=$user_id";
+    $result = mysqli_query($db, $query);
+    
+    
+    $results = [];
+    if ($result) {
+        while($row = mysqli_fetch_assoc($result)){
+            $results[] = $row;
+        }
+    }
+    var_dump($results);
+    die();
+?>
+<!-- php code starts to display username and email -->
 <div class="modal-header">
   <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
   <h4 class="modal-title">General Settings</h4>
@@ -11,7 +28,7 @@
       User name
     </div>
     <div class="col-sm-3">
-      <a href="#" title="Edit Username"><i class="fa fa-pencil" aria-hidden="true"></i> <i>Edit</i></a>
+      <a href="username.html" title="Edit Username"><i class="fa fa-pencil" aria-hidden="true"></i> <i>Edit</i></a>
     </div>
   </div>
   <div class="row modal-row">
@@ -27,7 +44,7 @@
     </div>
     <div class="col-sm-3">
       <p>
-        <a href="#" title="Edit Email"><i class="fa fa-pencil" aria-hidden="true"></i> <i>Edit</i></a>
+        <a href="email.html" title="Edit Email"><i class="fa fa-pencil" aria-hidden="true"></i> <i>Edit</i></a>
       </p>
     </div>
   </div>
@@ -41,10 +58,10 @@
       <p>*********</p>
     </div>
     <div class="col-sm-3">
-      <a href="#" title="Edit Password"><i class="fa fa-pencil" aria-hidden="true"></i> <i>Edit</i></a>
+      <a href="password.html" title="Edit Password"><i class="fa fa-pencil" aria-hidden="true"></i> <i>Edit</i></a>
     </div>
   </div>
-  <div class="row modal-row">
+  <!-- <div class="row modal-row">
     <div class="col-sm-3">
       <p>
         <label>Language: </label>
@@ -83,8 +100,8 @@
     <div class="col-sm-3">
     </div>
   </div>
-</div>
+</div> -->
 <div class="modal-footer">
   <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-  <button type="button" class="btn btn-social">Save changes</button>
+  <!-- <button type="button" class="btn btn-social">Save changes</button> -->
 </div>

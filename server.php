@@ -77,6 +77,8 @@ if (isset($_POST['login_user'])) {
           
           $_SESSION['username'] = $username;
           $_SESSION['user_id'] = $user['id'];
+          $_SESSION['password'] = $password;
+          
           $_SESSION['success'] = "You are now logged in";
           header('location: wall.php');
         }else {
