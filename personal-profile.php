@@ -12,11 +12,52 @@
     <link rel="stylesheet" href="lib/font-awesome/css/font-awesome.min.css">
     <link rel="stylesheet" href="lib/bootstrap-switch/css/bootstrap-switch.min.css">
     <script src="lib/bootstrap-switch/js/bootstrap-switch.min.js"></script>
-    <script src="../twemoji.maxcdn.com/twemoji.min.js"></script>
     <script src="js/lazy-load.min.js"></script>
     <script src="js/socialyte.min.js"></script>
     <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,600,700" rel="stylesheet">
     <link rel="stylesheet" href="style.css" type="text/css">
+
+    <style>
+.container {
+  position: relative;
+  width: 10%;
+}
+
+.image {
+  opacity: 1;
+  display: block;
+  width: 100%;
+  height: auto;
+  transition: .5s ease;
+  backface-visibility: hidden;
+}
+
+.middle {
+  transition: .5s ease;
+  opacity: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  text-align: center;
+}
+
+.sidebar-nav:hover .image {
+  opacity: 0.3;
+}
+
+.sidebar-nav:hover .middle {
+  opacity: 1;
+}
+
+.text {
+  background-color: #4CAF50;
+  color: white;
+  font-size: 16px;
+  padding: 6px 6px;
+}
+</style>
 </head>
 
 <body id="personal">
@@ -40,7 +81,7 @@
 
 <?php 
     $y = $_SESSION['user_id'];
-    $queryupdate = "select up.fname, up.age, up.description, u.username as username from updatedetails as up, users as u where up.user_id=".$y." and u.id=up.user_id order by up.update_id desc LIMIT 1";
+    $queryupdate = "select up.fname, u.image, up.age, up.description, u.username as username from updatedetails as up, users as u where up.user_id=".$y." and u.id=up.user_id order by up.update_id desc LIMIT 1";
     $resup = mysqli_query($db, $queryupdate);
 
     $resups = [];
@@ -107,11 +148,11 @@
             </span>
             <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownNotification">
                 <li class="new-not">
-                    <a href="#" title="User name comment"><img src="img/user2.jpg" alt="User name"
+                    <a href="#" title="User name comment"><img src="img/user2.JPG" alt="User name"
                             class="img-circle img-user-mini"> User comments your post</a>
                 </li>
                 <li class="new-not">
-                    <a href="#" title="User name comment"><img src="img/user3.jpg" alt="User name"
+                    <a href="#" title="User name comment"><img src="img/user3.JPG" alt="User name"
                             class="img-circle img-user-mini"> User comments your post</a>
                 </li>
                 <li>
@@ -137,9 +178,13 @@
     <!--Left Sidebar with info Profile -->
     <?php foreach($resups as $resp){ ?>
     <div class="sidebar-nav">
-        <a href="personal-profile.php" title="Profile">
-            <img src="img/user.jpg" alt="User name" class="img-circle img-user">
-        </a>
+    <img id="profilepic" src="<?php if($resp['image'] == ""){ echo 'img/user.jpg'; }else{ echo 'img/'.$resp['image']; }  ?>" alt="Avatar" class="image" style="width:100%">
+  <div class="middle">
+  <label for="profilePicChange">
+      <input type="file" name="image" id="profilePicChange" style="display:none;"/>
+      <div class="text">Edit</div>
+   </label>
+  </div>
         <h2 class="text-center hidden-xs"><a href="personal-profile.php" title="Profile"><?php echo $resp['fname']; ?></a></h2>
         <p class="text-center user-description hidden-xs">
             <i><?php echo $resp['description']; ?></i>
@@ -173,7 +218,7 @@
                 <div class="row">
                     <div class="col-xs-3 col-sm-2">
                         <a href="user-profile.php" title="User Profile">
-                            <img src="img/user2.jpg" alt="User name" class="img-circle img-user">
+                            <img src="<?php if($resp['image'] == ""){ echo 'img/user.jpg'; }else{ echo 'img/'.$resp['image']; }  ?>" alt="User name" class="img-circle img-user">
                         </a>
                     </div>
                     <div class="col-xs-9 col-sm-10 info-user">
@@ -184,7 +229,7 @@
                 <div class="row">
                     <div class=" col-sm-8 col-sm-offset-2 data-post">
                         <p><?php echo $res['post']; ?></p>
-                        <!-- <img src="img/post.jpg" alt="image post" class="img-post"> -->
+                        <img src="" alt="image post" class="img-post">
                         <div class="reaction">
                             &#x2764; 1234 &#x1F603; 54
                         </div>
@@ -207,7 +252,7 @@
                         <div class="row">
                             <div class="col-xs-3 col-sm-2">
                                 <a href="personal-profile.php" title="Profile">
-                                    <img src="img/user.jpg" alt="My User" class="img-circle img-user">
+                                    <img src="img/user.JPG" alt="My User" class="img-circle img-user">
                                 </a>
                             </div>
                             <div class="col-xs-9 col-sm-10 info-user">
@@ -240,7 +285,7 @@
                         <div class="row">
                             <div class="col-xs-3 col-sm-2">
                                 <a href="personal-profile.php" title="Profile">
-                                    <img src="img/user.jpg" alt="User name" class="img-circle img-user">
+                                    <img src="img/user.JPG" alt="User name" class="img-circle img-user">
                                 </a>
                             </div>
                             <div class="col-xs-9 col-sm-10 info-user">
@@ -301,7 +346,7 @@
                         <div class="scrollbar-container">
                             <div class="row row-user-list">
                                 <div class="col-sm-2 col-xs-3">
-                                    <img src="img/user2.jpg" alt="User name" class="img-circle img-user">
+                                    <img src="img/user2.JPG" alt="User name" class="img-circle img-user">
                                 </div>
                                 <div class="col-sm-7 col-xs-9">
                                     <p><b>User Name</b> <span class="badge">1</span></p>
@@ -315,7 +360,7 @@
                             </div>
                             <div class="row row-user-list">
                                 <div class="col-sm-2 col-xs-3">
-                                    <img src="img/user3.jpg" alt="User name" class="img-circle img-user">
+                                    <img src="img/user3.JPG" alt="User name" class="img-circle img-user">
                                 </div>
                                 <div class="col-sm-7 col-xs-9">
                                     <p><b>User Name</b></p>
@@ -421,8 +466,35 @@
            }
         });
        });
+
+       $('#profilePicChange').change(function(){
+        var file = this.files[0];
+        var fD = new FormData();
+        fD.append('image', file);
+        $.ajax({
+           url: 'api/editprofile.php',
+           type: 'post',
+           dataType:'json',
+           data: fD,
+           processData: false,
+           contentType: false,
+           success: function(data){
+              if(data['status']){
+                  $('#profilepic').attr('src','img/'+data['image']);
+              }
+              else{
+                  alert(data['message']);
+              }
+           }
+        });
+       });
      });
+
+
+
+     
 
   </script>
 
 </body>
+</html>
